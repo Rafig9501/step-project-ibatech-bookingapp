@@ -46,6 +46,7 @@ public class UserDAO implements DAO<User> {
             ArrayList<User> data = (ArrayList<User>) o;
             boolean exist = data.stream().anyMatch(us -> us.getUserName().equals(user.getUserName()));
 
+            
             if (!exist) {
                 FileOutputStream fos = new FileOutputStream(file);
                 ObjectOutputStream oos = new ObjectOutputStream(fos);
