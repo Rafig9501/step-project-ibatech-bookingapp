@@ -8,7 +8,7 @@ public class RandomGen {
 
     static List<String> ID = new ArrayList<>();
 
-    public static String genID() {
+    public static String genFlightID() {
 
         String alphabetic = RandomStringUtils.randomAlphabetic(3);
         String numeric = RandomStringUtils.randomNumeric(2);
@@ -17,7 +17,7 @@ public class RandomGen {
             ID.add(random);
             return random;
         }
-        else return genID();
+        else return genFlightID();
     }
 }
 

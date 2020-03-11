@@ -1,7 +1,7 @@
 package ui.main;
 
-import dao.UserDAO;
-import pojo.User;
+import dao.FlightDAO;
+import pojo.Flight;
 
 import java.io.IOException;
 

@@ -4,6 +4,7 @@ import pojo.User;
 
 import java.io.*;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class UserDAO implements DAO<User> {
@@ -11,20 +12,17 @@ public class UserDAO implements DAO<User> {
     File file = new File("C:\\Users\\User\\Desktop\\IdeaProjects\\StepProjectFlights\\files\\users.bin");
 
     @Override
-    public Optional<User> get(String username) throws IOException {
+    public Optional<User> get(String username) throws IOException, ClassNotFoundException {
 
-        Optional.of(new ObjectInputStream(new FileInputStream(file)))
-                .filter(objectInputStream -> {
-                    try {
-                        ArrayList<User> readed = (ArrayList) objectInputStream.readObject();
-                        return readed.stream().anyMatch(user -> user.getUserName().equals(username));
-                    } catch (IOException | ClassNotFoundException e) {
-                        e.printStackTrace();
-                        return false;
-                    }
-                });
-
-        return Optional.empty();
+        if (Optional.ofNullable(this.file).isPresent()) {
+                FileInputStream fis = new FileInputStream(this.file);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            ArrayList<User> users = (ArrayList<User>) ois.readObject();
+            fis.close();
+            ois.close();
+            return users.stream().filter(user -> user.getUserName().equals(username)).findFirst();
+        }
+        else return Optional.empty();
     }
 
     @Override
@@ -38,15 +36,13 @@ public class UserDAO implements DAO<User> {
             oos.writeObject(userList);
             fos.close();
             oos.close();
-        }
-        else if (file.exists()) {
+        } else if (file.exists()) {
             FileInputStream fis = new FileInputStream(file);
             ObjectInputStream ois = new ObjectInputStream(fis);
             Object o = ois.readObject();
             ArrayList<User> data = (ArrayList<User>) o;
             boolean exist = data.stream().anyMatch(us -> us.getUserName().equals(user.getUserName()));
 
-            
             if (!exist) {
                 FileOutputStream fos = new FileOutputStream(file);
                 ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -61,8 +57,9 @@ public class UserDAO implements DAO<User> {
     }
 
     @Override
-    public void delete(int id) {
-
+    public boolean delete(String userName) throws IOException, ClassNotFoundException {
+        // this function didn't implemented
+        return false;
     }
 
     @Override
@@ -70,7 +67,7 @@ public class UserDAO implements DAO<User> {
 
         FileInputStream fis = new FileInputStream(file);
         ObjectInputStream ois = new ObjectInputStream(fis);
-        Object readed = ois.readObject();
-        return (ArrayList<User>) readed;
+        Object users = ois.readObject();
+        return (ArrayList<User>) users;
     }
 }
