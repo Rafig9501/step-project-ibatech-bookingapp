@@ -12,17 +12,23 @@ public class Flight implements Serializable {
     String from;
     String to;
     String dateTime;
+    int seats;
 
-    public Flight(String from, String to, int yyyy, int MM, int dd, int hh, int mm) {
+    public Flight(String from, String to, int seats, int yyyy, int MM, int dd, int hh, int mm) {
         flightID = genFlightID();
         this.from = from;
         this.to = to;
+        this.seats = seats;
         this.dateTime = LocalDateTime.of(yyyy,MM,dd,hh,mm)
                 .format(DateTimeFormatter.ofPattern("uuuu-MM-dd-HH:mm"));;
     }
 
     public String getFlightID() {
         return flightID;
+    }
+
+    public int getSeats() {
+        return seats;
     }
 
     public String getFrom() {
@@ -35,6 +41,26 @@ public class Flight implements Serializable {
 
     public String getDateTime() {
         return dateTime;
+    }
+
+    public void setFlightID(String flightID) {
+        this.flightID = flightID;
+    }
+
+    public void setFrom(String from) {
+        this.from = from;
+    }
+
+    public void setTo(String to) {
+        this.to = to;
+    }
+
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public void setSeats(int seats) {
+        this.seats = seats;
     }
 
     @Override

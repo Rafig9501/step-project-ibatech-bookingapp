@@ -2,11 +2,13 @@ package pojo;
 
 public class Booking {
 
+    User user;
     String name;
     String surname;
     Flight flight;
 
-    public Booking(String name, String surname, Flight flight) {
+    public Booking(User user, String name, String surname, Flight flight) {
+        this.user = user;
         this.name = name;
         this.surname = surname;
         this.flight = flight;
@@ -22,6 +24,10 @@ public class Booking {
 
     public Flight getFlight() {
         return flight;
+    }
+
+    public User getUser() {
+        return user;
     }
 
     @Override

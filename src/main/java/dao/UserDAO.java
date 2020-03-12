@@ -9,13 +9,13 @@ import java.util.function.Predicate;
 
 public class UserDAO implements DAO<User> {
 
-    File file = new File("C:\\Users\\User\\Desktop\\IdeaProjects\\StepProjectFlights\\files\\users.bin");
+    final File file = new File("C:\\Users\\User\\Desktop\\IdeaProjects\\StepProjectFlights\\files\\users.bin");
 
     @Override
     public Optional<User> get(String username) throws IOException, ClassNotFoundException {
 
         if (Optional.ofNullable(this.file).isPresent()) {
-                FileInputStream fis = new FileInputStream(this.file);
+            FileInputStream fis = new FileInputStream(this.file);
             ObjectInputStream ois = new ObjectInputStream(fis);
             ArrayList<User> users = (ArrayList<User>) ois.readObject();
             fis.close();
@@ -39,10 +39,9 @@ public class UserDAO implements DAO<User> {
         } else if (file.exists()) {
             FileInputStream fis = new FileInputStream(file);
             ObjectInputStream ois = new ObjectInputStream(fis);
-            Object o = ois.readObject();
-            ArrayList<User> data = (ArrayList<User>) o;
+            Object readed = ois.readObject();
+            ArrayList<User> data = (ArrayList<User>) readed;
             boolean exist = data.stream().anyMatch(us -> us.getUserName().equals(user.getUserName()));
-
             if (!exist) {
                 FileOutputStream fos = new FileOutputStream(file);
                 ObjectOutputStream oos = new ObjectOutputStream(fos);

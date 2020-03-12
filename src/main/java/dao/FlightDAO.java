@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class FlightDAO implements DAO<Flight> {
 
-    File file = new File("C:\\Users\\User\\Desktop\\IdeaProjects\\StepProjectFlights\\files\\flights.bin");
+    final static File file = new File("C:\\Users\\User\\Desktop\\IdeaProjects\\StepProjectFlights\\files\\flights.bin");
 
     public FlightDAO() throws IOException {
 
@@ -21,15 +21,15 @@ public class FlightDAO implements DAO<Flight> {
             FileOutputStream fos = new FileOutputStream(file);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             List<Flight> flights = new ArrayList<>();
-            flights.add(new Flight("Baku","London",2020,7,15,21,30));
-            flights.add(new Flight("Baku","Moscow",2020,3,29,2,10));
-            flights.add(new Flight("Baku","Kiev",2020,4,3,11,15));
-            flights.add(new Flight("Baku","Tehran",2020,5,1,15,0));
-            flights.add(new Flight("Baku","Saint Petersburg",2020,5,12,12,40));
-            flights.add(new Flight("Baku","Astana",2020,3,17,9,20));
-            flights.add(new Flight("Baku","Batumi",2020,3,31,12,45));
-            flights.add(new Flight("Baku","Istanbul",2020,4,13,5,35));
-            flights.add(new Flight("Baku","Dubai",2020,4,18,15,0));
+            flights.add(new Flight("Baku","London",20,2020,7,15,21,30));
+            flights.add(new Flight("Baku","Moscow",15,2020,3,29,2,10));
+            flights.add(new Flight("Baku","Kiev",18,2020,4,3,11,15));
+            flights.add(new Flight("Baku","Tehran",26,2020,5,1,15,0));
+            flights.add(new Flight("Baku","Saint Petersburg",29,2020,5,12,12,40));
+            flights.add(new Flight("Baku","Astana",11,2020,3,17,9,20));
+            flights.add(new Flight("Baku","Batumi",7,2020,3,31,12,45));
+            flights.add(new Flight("Baku","Istanbul",32,2020,4,13,5,35));
+            flights.add(new Flight("Baku","Dubai",17,2020,4,18,15,0));
             oos.writeObject(flights);
             fos.close();
             oos.close();
