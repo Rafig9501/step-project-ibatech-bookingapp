@@ -1,78 +1,76 @@
 package dao;
 
-import pojo.Booking;
-import pojo.Flight;
-import pojo.User;
+import entity.Booking;
+import entity.Flight;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class BookingDAO implements DAO<Booking> {
 
-    final File file = new File("C:\\Users\\User\\Desktop\\IdeaProjects\\StepProjectFlights\\files\\bookings.bin");
-    boolean seat = false;
+    public final File file = new File("C:\\Users\\User\\Desktop\\IdeaProjects\\StepProjectFlights\\files\\bookings.bin");
 
-    @Override
-    public Optional<Booking> get(String id) {
-        return Optional.empty();
-    }
-
-    @Override
-    public void save(Booking booking) throws IOException, ClassNotFoundException {
-
+    public BookingDAO() throws IOException {
         if (!file.exists()) {
-
-            FileInputStream fis = new FileInputStream(FlightDAO.file);
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            ArrayList<Flight> flights = (ArrayList<Flight>) ois.readObject();
-            List<Flight> flightList = flights.stream().map(flight -> {
-                if (flight.getSeats() >= 0) {
-                    flight.setSeats(flight.getSeats() - 1);
-                    seat = flight.getSeats() >= 0;
-                    return flight;
-                } else {
-                    seat = flight.getSeats() >= 0;
-                    return flight;
-                }
-            }).collect(Collectors.toList());
-            fis.close();
-            ois.close();
-            FileOutputStream fos = new FileOutputStream(FlightDAO.file);
+            FileOutputStream fos = new FileOutputStream(file);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(flightList);
-
-        } else if (file.exists()) {
-            FileInputStream fis = new FileInputStream(file);
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            Object readed = ois.readObject();
-            ArrayList<Booking> bookings = (ArrayList<Booking>) readed;
-            boolean exist = bookings.stream().anyMatch(b -> (b.getName().equals(booking.getName())
-                    && b.getSurname().equals(booking.getSurname())));
-            if (!exist) {
-                FileOutputStream fos = new FileOutputStream(file);
-                ObjectOutputStream oos = new ObjectOutputStream(fos);
-                bookings.add(booking);
-                oos.writeObject(booking);
-                fos.close();
-                oos.close();
-            }
-            fis.close();
-            ois.close();
+            oos.writeObject(new ArrayList<Booking>());
         }
     }
 
     @Override
-    public boolean delete(String id) {
-        return false;
+    public Optional<Booking> get(String passengerID) throws IOException, ClassNotFoundException {
+        ArrayList<Booking> bookings = (ArrayList<Booking>) getAll();
+        return bookings.stream().filter(booking
+                -> booking.getPassenger().getId().equals(passengerID)).findFirst();
     }
 
     @Override
-    public Collection<Booking> getAll() {
-        return null;
+    public void create(Booking booking) throws IOException {
+        FileOutputStream fos = new FileOutputStream(file);
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+        List<Booking> bookings = new ArrayList<>();
+        bookings.add(booking);
+        oos.writeObject(bookings);
+        fos.close();
+        oos.close();
+    }
+
+    @Override
+    public void delete(String passengerID) throws IOException, ClassNotFoundException {
+        ArrayList<Booking> bookings = (ArrayList<Booking>) getAll();
+        List<Booking> updatedBookings = bookings.stream().filter(booking ->
+                !booking.getPassenger().getId().equals(passengerID)).collect(Collectors.toList());
+        FileOutputStream fos = new FileOutputStream(file);
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+        oos.writeObject(updatedBookings);
+        fos.close();
+        oos.close();
+    }
+
+    @Override
+    public void update(Booking booking) throws Exception {
+        ArrayList<Booking> bookings = (ArrayList<Booking>) getAll();
+        FileOutputStream fos = new FileOutputStream(file);
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+        bookings.add(booking);
+        oos.writeObject(bookings);
+        fos.close();
+        oos.close();
+    }
+
+    @Override
+    public Collection<Booking> getAll() throws IOException, ClassNotFoundException {
+        FileInputStream fis = new FileInputStream(file);
+        ObjectInputStream ois = new ObjectInputStream(fis);
+        Object readed = ois.readObject();
+        fis.close();
+        ois.close();
+        return (ArrayList<Booking>) readed;
     }
 }

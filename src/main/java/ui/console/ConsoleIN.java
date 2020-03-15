@@ -8,16 +8,21 @@ public class ConsoleIN {
 
     static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
+    public static String reader() throws IOException {
+        return reader.readLine();
+    }
+
     public static int menuLogIn() throws IOException {
 
-        String in = reader.readLine();
-        switch (in){
+        switch (reader()){
             case "1":
                 return 1;
             case "2":
                 return 2;
             case "3":
                 return 3;
+            case "4":
+                return 4;
             default:
                 ConsoleOUT.print("Please enter right command");
                 return menuLogIn();
@@ -26,9 +31,7 @@ public class ConsoleIN {
 
     public static int menuSignIn() throws IOException {
 
-        String in = reader.readLine();
-
-        switch (in){
+        switch (reader()){
             case "1":
                 return 1;
             case "2":
@@ -41,8 +44,6 @@ public class ConsoleIN {
                 return 5;
             case "6":
                 return 6;
-            case "7":
-                return 7;
             default:
                 ConsoleOUT.print("Please enter right command");
                 return menuSignIn();

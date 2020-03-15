@@ -6,18 +6,27 @@ import java.util.*;
 
 public class RandomGen {
 
-    static List<String> ID = new ArrayList<>();
+    static List<String> flightID = new ArrayList<>();
+    static List<String> passengerID = new ArrayList<>();
 
     public static String genFlightID() {
 
         String alphabetic = RandomStringUtils.randomAlphabetic(3);
         String numeric = RandomStringUtils.randomNumeric(2);
         String random = numeric + " " + alphabetic.toUpperCase();
-        if (!(ID.contains(random))){
-            ID.add(random);
+        if (!(flightID.contains(random))){
+            flightID.add(random);
             return random;
         }
         else return genFlightID();
     }
-}
 
+    public static String genPassengerID(){
+        String numeric = RandomStringUtils.randomNumeric(2);
+            if (!(passengerID.contains(numeric))){
+            passengerID.add(numeric);
+            return numeric;
+        }
+        else return genPassengerID();
+    }
+}

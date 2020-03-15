@@ -1,4 +1,4 @@
-package pojo;
+package entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -20,7 +20,7 @@ public class Flight implements Serializable {
         this.to = to;
         this.seats = seats;
         this.dateTime = LocalDateTime.of(yyyy,MM,dd,hh,mm)
-                .format(DateTimeFormatter.ofPattern("uuuu-MM-dd-HH:mm"));;
+                .format(DateTimeFormatter.ofPattern("uuuu-MM-dd-HH:mm"));
     }
 
     public String getFlightID() {
@@ -63,13 +63,12 @@ public class Flight implements Serializable {
         this.seats = seats;
     }
 
+    public String represent(){
+        return String.format("%s - from %s to %s on %s, available seats - %d",flightID,from,to,dateTime,seats);
+    }
+
     @Override
     public String toString() {
-        return "Flight{" +
-                "flightID='" + flightID + '\'' +
-                ", from='" + from + '\'' +
-                ", to='" + to + '\'' +
-                ", dateTime='" + dateTime + '\'' +
-                '}';
+        return represent();
     }
 }
