@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class BookingDAO implements DAO<Booking> {
@@ -31,37 +32,92 @@ public class BookingDAO implements DAO<Booking> {
     }
 
     @Override
-    public void create(Booking booking) throws IOException {
-        FileOutputStream fos = new FileOutputStream(file);
-        ObjectOutputStream oos = new ObjectOutputStream(fos);
+    public boolean create(Booking booking) {
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(file);
+        } catch (FileNotFoundException e) {
+            return false;
+        }
+        ObjectOutputStream oos = null;
+        try {
+            oos = new ObjectOutputStream(fos);
+        } catch (IOException e) {
+            return false;
+        }
         List<Booking> bookings = new ArrayList<>();
         bookings.add(booking);
-        oos.writeObject(bookings);
-        fos.close();
-        oos.close();
+        try {
+            oos.writeObject(bookings);
+            fos.close();
+            oos.close();
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
     }
 
     @Override
-    public void delete(String passengerID) throws IOException, ClassNotFoundException {
-        ArrayList<Booking> bookings = (ArrayList<Booking>) getAll();
+    public boolean delete(String passengerID) {
+        ArrayList<Booking> bookings = null;
+        try {
+            bookings = (ArrayList<Booking>) getAll();
+        } catch (IOException | ClassNotFoundException e) {
+            return false;
+        }
         List<Booking> updatedBookings = bookings.stream().filter(booking ->
                 !booking.getPassenger().getId().equals(passengerID)).collect(Collectors.toList());
-        FileOutputStream fos = new FileOutputStream(file);
-        ObjectOutputStream oos = new ObjectOutputStream(fos);
-        oos.writeObject(updatedBookings);
-        fos.close();
-        oos.close();
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(file);
+        } catch (FileNotFoundException e) {
+            return false;
+        }
+        ObjectOutputStream oos = null;
+        try {
+            oos = new ObjectOutputStream(fos);
+        } catch (IOException e) {
+            return false;
+        }
+        try {
+            oos.writeObject(updatedBookings);
+            fos.close();
+            oos.close();
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
     }
 
     @Override
-    public void update(Booking booking) throws Exception {
-        ArrayList<Booking> bookings = (ArrayList<Booking>) getAll();
-        FileOutputStream fos = new FileOutputStream(file);
-        ObjectOutputStream oos = new ObjectOutputStream(fos);
+    public boolean update(Booking booking) {
+        ArrayList<Booking> bookings = null;
+        try {
+            bookings = (ArrayList<Booking>) getAll();
+        } catch (IOException | ClassNotFoundException e) {
+            return false;
+        }
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(file);
+        } catch (FileNotFoundException e) {
+            return false;
+        }
+        ObjectOutputStream oos = null;
+        try {
+            oos = new ObjectOutputStream(fos);
+        } catch (IOException e) {
+            return false;
+        }
         bookings.add(booking);
-        oos.writeObject(bookings);
-        fos.close();
-        oos.close();
+        try {
+            oos.writeObject(bookings);
+            fos.close();
+            oos.close();
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
     }
 
     @Override

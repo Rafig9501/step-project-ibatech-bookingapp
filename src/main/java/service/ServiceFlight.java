@@ -38,8 +38,7 @@ public class ServiceFlight {
 
             boolean flightExist = getAll().stream().anyMatch(f -> f.getFlightID().equals(flight.getFlightID()));
             if (!flightExist) {
-                flightDAO.update(flight);
-                return true;
+                return flightDAO.update(flight);
             }
             return false;
         }
@@ -48,8 +47,7 @@ public class ServiceFlight {
             boolean match = getAll().stream().anyMatch(flight ->
                     flight.getFlightID().equals(id));
             if (match) {
-                flightDAO.delete(id);
-                return true;
+                return flightDAO.delete(id);
             }
         return false;
     }

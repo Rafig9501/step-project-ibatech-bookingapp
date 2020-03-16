@@ -51,14 +51,24 @@ public class ConsoleOUT {
     public static void notRegistered(){print("Registration wasn't succesful, please enter another login");}
 
     public static void flightId(){
-        print("Please enter ID of flight which you would like to make booking");
+        print("Please enter ID of flight");
     }
 
-    public static void passengerExist(){print("Please enter another name and surname");}
-
-    public static void loginFailed(){print("Please enter right login and password");}
-
-    public static void bookingCancel(){
-        print("Please enter passenger name for cancelling booking");
+    public static void bookingMade(){
+        print("Booking has been made");
     }
+
+    public static void bookingDidntMade(){
+        print("Please enter right name, surname and flight ID");
+    }
+
+    public static void notSuccesful(){print("Please enter right name, surname and flight ID");}
+
+    public static void failed(){print("Please enter right login and password");}
+
+    public static void userDeleted(){print("This user has been deleted!");}
+
+    public static void bookingDeleted(){print("Booking has been deleted");}
+
+    public static void thereIsNoBooking(){print("There is no booking");}
 }

@@ -24,12 +24,7 @@ public class ControllerUser {
     public boolean saveUser(String userName, String password){
         User user = new User(userName,password);
         try {
-            boolean saved = service.save(user);
-            if (!saved){
-                deleteUser(userName,getUser(userName).map(User::getPassword).get());
-                return service.save(user);
-            }
-            return saved;
+            return service.save(user);
         } catch (IOException | ClassNotFoundException e) {
             return false;
         }

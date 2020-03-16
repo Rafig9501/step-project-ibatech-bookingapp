@@ -18,30 +18,31 @@ public class ServiceUser {
     }
 
     public Optional<User> get(String username) throws IOException, ClassNotFoundException {
-            return userDAO.get(username);
+        return userDAO.get(username);
     }
 
     public boolean save(User user) throws IOException, ClassNotFoundException {
-            boolean userExist = getAll().stream().anyMatch(us -> us.getUserName().equals(user.getUserName()));
-            if (!userExist) {
-                userDAO.update(user);
-                return true;
-            }
-            return false;
+        boolean userExist = getAll().stream().anyMatch(us -> us.getUserName().equals(user.getUserName()));
+        if (!userExist) {
+            return userDAO.update(user);
+        }
+        return false;
     }
 
     public ArrayList<User> getAll() throws IOException, ClassNotFoundException {
         if (userDAO.file.exists()) return (ArrayList<User>) userDAO.getAll();
-        return null;
+        return new ArrayList<>();
     }
 
     public boolean delete(String userName, String password) throws IOException, ClassNotFoundException {
-            boolean match = getAll().stream().anyMatch(user ->
-                    user.getUserName().equals(userName) && user.getPassword().equals(password));
-            if (match) {
-                userDAO.delete(userName);
-                return true;
-            }
+        boolean match = false;
+        if (userDAO.file.exists()){
+        match = getAll().stream().anyMatch(user ->
+                user.getUserName().equals(userName) && user.getPassword().equals(password));
+        }
+        if (match) {
+            return userDAO.delete(userName);
+        }
         return false;
     }
 }

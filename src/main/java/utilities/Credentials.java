@@ -2,7 +2,7 @@ package utilities;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class Credentials {
 
@@ -17,6 +17,6 @@ public class Credentials {
     }
 
     public static String getUserName() {
-        return loggedIn.keySet().stream().findFirst().get();
+        return loggedIn.keySet().stream().map(String::toString).collect(Collectors.joining());
     }
 }

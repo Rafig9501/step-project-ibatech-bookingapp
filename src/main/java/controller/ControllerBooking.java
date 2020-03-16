@@ -1,6 +1,7 @@
 package controller;
 
 import entity.Booking;
+import entity.Flight;
 import entity.Passenger;
 import service.ServiceBooking;
 import service.ServiceFlight;
@@ -26,31 +27,39 @@ public class ControllerBooking {
         serviceBooking = new ServiceBooking();
     }
 
-    public Booking saveBooking(String name, String surname, String flightID) throws Exception {
-        Booking booking = null;
-        if (serviceUser.get(Credentials.getUserName()).isPresent()){
-        booking = new Booking(serviceUser.get(Credentials.getUserName()).get(),
-                new Passenger(name, surname), flightID);
+    public boolean saveBooking(String name, String surname, String flightID) throws Exception {
+        boolean saved = false;
+        if (serviceUser.get(Credentials.getUserName()).isPresent()) {
+            Booking booking = new Booking(serviceUser.get(Credentials.getUserName()).get(),
+                    new Passenger(name, surname), flightID);
+            saved = serviceBooking.save(booking);
         }
-        boolean saved = serviceBooking.save(booking);
-        if (saved) {
-            return booking;
-        } else {
-            return null;
-        }
+        return saved;
     }
 
-    public void getAllBookings() throws IOException, ClassNotFoundException {
+    public boolean getAllBookings() throws IOException, ClassNotFoundException {
         ArrayList<Booking> bookings = serviceBooking.getAll();
+        if (!bookings.isEmpty()){
         bookings.forEach(booking -> ConsoleOUT.print(booking.represent()));
+        return true;
+        }
+        return false;
     }
 
-    public boolean deleteBooking(String passengerName, String passengerSurname) throws IOException, ClassNotFoundException {
+    public boolean deleteBooking(String passengerName, String passengerSurname, String flightID) throws IOException, ClassNotFoundException {
+        Booking booking;
         ArrayList<Booking> bookings = serviceBooking.getAll();
-        Booking booking = bookings.stream().filter(b -> b.getPassenger().getName().equals(passengerName)
-                && b.getPassenger().getSurname().equals(passengerSurname)).findFirst()
-                .orElseThrow(() -> new RuntimeException("not found"));
-        return serviceBooking.delete(booking.getFlightID());
+        boolean bookingExist = bookings.stream().anyMatch(b -> b.getPassenger().getName().equals(passengerName)
+                && b.getPassenger().getSurname().equals(passengerSurname)
+                && b.getFlight().getFlightID().equals(flightID));
+
+        if (bookingExist) {
+            booking = bookings.stream().filter(b -> b.getPassenger().getName().equals(passengerName)
+                    && b.getPassenger().getSurname().equals(passengerSurname)
+             && b.getFlight().getFlightID().equals(flightID)).findFirst()
+                    .orElseThrow(() -> new RuntimeException("not found"));
+            return serviceBooking.delete(booking.getPassenger().getId());
+        } else return false;
     }
 
     public Optional<Booking> getBooking(String passengerName, String passengerSurname) throws IOException, ClassNotFoundException {
@@ -61,3 +70,17 @@ public class ControllerBooking {
         return serviceBooking.get(booking.getPassenger().getId());
     }
 }
+
+// public Booking saveBooking(String name, String surname, String flightID) throws Exception {
+//        Booking booking = null;
+//        if (serviceUser.get(Credentials.getUserName()).isPresent()) {
+//            booking = new Booking(serviceUser.get(Credentials.getUserName()).get(),
+//                    new Passenger(name, surname), flightID);
+//        }
+//        boolean saved = serviceBooking.save(booking);
+//        if (saved) {
+//            return booking;
+//        } else {
+//            return null;
+//        }
+//    }

@@ -30,48 +30,37 @@ public class ServiceBooking {
 
     public boolean save(Booking booking) throws Exception {
 
-        serviceFlight.getAll().stream().filter(f ->
-                f.getFlightID().equals(booking.getFlightID())).findFirst().map(flight -> {
-                   if (flight.getSeats() > 0){
-                       flight.setSeats(flight.getSeats() - 1);
-                       try {
-                           serviceFlight.delete(flight.getFlightID());
-                           serviceFlight.save(flight);
-                           delete(booking.getPassenger().getId());
-                           booking.setFlight(flight);
-                           bookingDAO.update(booking);
-                           return true;
-                       } catch (Exception e) {
-                           e.printStackTrace();
-                           return false;
-                       }
-                   }
-                   return false;
-                });
+        Flight flight = null;
+        if (serviceFlight.getAll().stream().anyMatch(f ->
+                f.getFlightID().equals(booking.getFlightID()))) {
+            flight = serviceFlight.getAll().stream().filter(f ->
+                    f.getFlightID().equals(booking.getFlightID())).findFirst().get();
+        }
+
+        if (flight != null && flight.getSeats() > 0) {
+            flight.setSeats(flight.getSeats() - 1);
+            serviceFlight.delete(flight.getFlightID());
+            serviceFlight.save(flight);
+            delete(booking.getPassenger().getId());
+            booking.setFlight(flight);
+            return bookingDAO.update(booking);
+        }
         return false;
     }
 
     public ArrayList<Booking> getAll() throws IOException, ClassNotFoundException {
-        return  (ArrayList<Booking>) bookingDAO.getAll().stream().filter(booking ->
+        if (bookingDAO.file.exists()){
+        return (ArrayList<Booking>) bookingDAO.getAll().stream().filter(booking ->
                 booking.getUser().getUserName().equals(Credentials.getUserName()))
                 .collect(Collectors.toList());
+        }
+        return new ArrayList<>();
     }
 
     public boolean delete(String passengerID) throws IOException, ClassNotFoundException {
-        bookingDAO.delete(passengerID);
+        if (bookingDAO.file.exists()) {
+            return bookingDAO.delete(passengerID);
+        }
         return false;
     }
 }
-// Flight flight = serviceFlight.getAll().stream().filter(f ->
-//                f.getFlightID().equals(booking.getFlightID())).findFirst().get();
-//
-//        if (flight.getSeats() > 0) {
-//            flight.setSeats(flight.getSeats() - 1);
-//            serviceFlight.delete(flight.getFlightID());
-//            serviceFlight.save(flight);
-//            delete(booking.getPassenger().getId());
-//            booking.setFlight(flight);
-//            bookingDAO.update(booking);
-//            return true;
-//        }
-//        return false;
