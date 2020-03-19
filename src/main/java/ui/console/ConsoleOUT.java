@@ -2,11 +2,11 @@ package ui.console;
 
 public class ConsoleOUT {
 
-    public static void print(String string){
+    public static void print(String string) {
         System.out.println(string);
     }
 
-    public static void printingMenuLogIn(){
+    public static void printingMenuLogIn() {
 
         print("==========================================");
         print("            TICKET BOOKING APP          ");
@@ -19,7 +19,7 @@ public class ConsoleOUT {
         print("==========================================");
     }
 
-    public static void printingMenuSignedIn(){
+    public static void printingMenuSignedIn() {
 
         print("==========================================");
         print("            TICKET BOOKING APP          ");
@@ -34,41 +34,59 @@ public class ConsoleOUT {
         print("==========================================");
     }
 
-    public static void userName(){
+    public static void userName() {
         print("Please enter your username :");
     }
 
-    public static void password(){
+    public static void password() {
         print("Please enter password : ");
     }
 
-    public static void registered(){print("You have been registered succesfully");}
+    public static void registered() {
+        print("You have been registered succesfully");
+    }
 
-    public static void passengerName(){print("Please enter passenger name");}
+    public static void passengerName() {
+        print("Please enter passenger name");
+    }
 
-    public static void passengeSurname(){print("Please enter passenger surname");}
+    public static void passengeSurname() {
+        print("Please enter passenger surname");
+    }
 
-    public static void notRegistered(){print("Registration wasn't succesful, please enter another login");}
+    public static void notRegistered() {
+        print("Registration wasn't succesful, please enter another login");
+    }
 
-    public static void flightId(){
+    public static void flightId() {
         print("Please enter ID of flight");
     }
 
-    public static void bookingMade(){
+    public static void bookingMade() {
         print("Booking has been made");
     }
 
-    public static void bookingDidntMade(){
+    public static void bookingDidntMade() {
         print("Please enter right name, surname and flight ID");
     }
 
-    public static void notSuccesful(){print("Please enter right name, surname and flight ID");}
+    public static void notSuccesful() {
+        print("Please enter right name, surname and flight ID");
+    }
 
-    public static void failed(){print("Please enter right login and password");}
+    public static void failed() {
+        print("Please enter right login and password");
+    }
 
-    public static void userDeleted(){print("This user has been deleted!");}
+    public static void userDeleted() {
+        print("This user has been deleted!");
+    }
 
-    public static void bookingDeleted(){print("Booking has been deleted");}
+    public static void bookingDeleted() {
+        print("Booking has been deleted");
+    }
 
-    public static void thereIsNoBooking(){print("There is no booking");}
+    public static void thereIsNoBooking() {
+        print("There is no booking");
+    }
 }

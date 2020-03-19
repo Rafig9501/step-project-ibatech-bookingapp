@@ -2,7 +2,8 @@ package utilities;
 
 import org.apache.commons.lang3.RandomStringUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RandomGen {
 
@@ -14,19 +15,17 @@ public class RandomGen {
         String alphabetic = RandomStringUtils.randomAlphabetic(3);
         String numeric = RandomStringUtils.randomNumeric(2);
         String random = numeric + " " + alphabetic.toUpperCase();
-        if (!(flightID.contains(random))){
+        if (!(flightID.contains(random))) {
             flightID.add(random);
             return random;
-        }
-        else return genFlightID();
+        } else return genFlightID();
     }
 
-    public static String genPassengerID(){
+    public static String genPassengerID() {
         String numeric = RandomStringUtils.randomNumeric(2);
-            if (!(passengerID.contains(numeric))){
+        if (!(passengerID.contains(numeric))) {
             passengerID.add(numeric);
             return numeric;
-        }
-        else return genPassengerID();
+        } else return genPassengerID();
     }
 }

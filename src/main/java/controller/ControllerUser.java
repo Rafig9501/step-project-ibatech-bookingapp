@@ -6,8 +6,6 @@ import service.ServiceUser;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 public class ControllerUser {
 
@@ -17,32 +15,20 @@ public class ControllerUser {
         service = new ServiceUser();
     }
 
-    public Optional<User> getUser(String userName) throws IOException, ClassNotFoundException {
-            return service.get(userName);
+    public Optional<User> getUser(String userName) {
+        return service.get(userName);
     }
 
-    public boolean saveUser(String userName, String password){
-        User user = new User(userName,password);
-        try {
-            return service.save(user);
-        } catch (IOException | ClassNotFoundException e) {
-            return false;
-        }
+    public boolean saveUser(String userName, String password) {
+        User user = new User(userName, password);
+        return service.save(user);
     }
 
-    public ArrayList<User> getAllUsers(){
-        try {
-            return service.getAll();
-        } catch (IOException | ClassNotFoundException e) {
-            return null;
-        }
+    public ArrayList<User> getAllUsers() {
+        return service.getAll();
     }
 
-    public boolean deleteUser(String userName, String password){
-        try {
-            return service.delete(userName,password);
-        } catch (IOException | ClassNotFoundException e) {
-            return false;
-        }
+    public boolean deleteUser(String userName, String password) {
+        return service.delete(userName, password);
     }
 }

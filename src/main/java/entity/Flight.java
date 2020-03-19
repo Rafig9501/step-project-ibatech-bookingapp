@@ -19,7 +19,7 @@ public class Flight implements Serializable {
         this.from = from;
         this.to = to;
         this.seats = seats;
-        this.dateTime = LocalDateTime.of(yyyy,MM,dd,hh,mm)
+        this.dateTime = LocalDateTime.of(yyyy, MM, dd, hh, mm)
                 .format(DateTimeFormatter.ofPattern("uuuu-MM-dd-HH:mm"));
     }
 
@@ -63,12 +63,7 @@ public class Flight implements Serializable {
         this.seats = seats;
     }
 
-    public String represent(){
-        return String.format("%s - from %s to %s on %s, available seats - %d",flightID,from,to,dateTime,seats);
-    }
-
-    @Override
-    public String toString() {
-        return represent();
+    public String represent() {
+        return String.format("%s - from %s to %s on %s, available seats - %d", flightID, from, to, dateTime, seats);
     }
 }

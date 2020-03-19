@@ -14,7 +14,7 @@ public class Controller {
     ControllerBooking controllerBooking;
     ControllerFlight controllerFlight;
 
-    public Controller() throws IOException, ClassNotFoundException {
+    public Controller() throws IOException {
         controllerUser = new ControllerUser();
         controllerFlight = new ControllerFlight();
         controllerBooking = new ControllerBooking();
@@ -104,10 +104,9 @@ public class Controller {
         if (savedBooking) {
             ConsoleOUT.bookingMade();
             logIn(username, password);
-        }
-        else {
+        } else {
             ConsoleOUT.bookingDidntMade();
-            logIn(username,password);
+            logIn(username, password);
         }
     }
 
@@ -141,7 +140,7 @@ public class Controller {
         String passengerSurname = ConsoleIN.reader();
         ConsoleOUT.flightId();
         String flightID = ConsoleIN.reader();
-        boolean deleted = controllerBooking.deleteBooking(passengerName, passengerSurname,flightID);
+        boolean deleted = controllerBooking.deleteBooking(passengerName, passengerSurname, flightID);
         if (!deleted) {
             ConsoleOUT.notSuccesful();
             logIn(username, password);

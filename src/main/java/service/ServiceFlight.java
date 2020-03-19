@@ -1,21 +1,17 @@
 package service;
 
 import dao.FlightDAO;
-import entity.Booking;
 import entity.Flight;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 public class ServiceFlight {
 
     FlightDAO flightDAO;
 
-    public ServiceFlight() throws IOException, ClassNotFoundException {
+    public ServiceFlight() {
         flightDAO = new FlightDAO();
         if (!flightDAO.file.exists()) {
             flightDAO.create(new Flight("Baku", "London", 20, 2020, 7, 15, 21, 30));
@@ -27,23 +23,27 @@ public class ServiceFlight {
             flightDAO.update(new Flight("Baku", "Batumi", 7, 2020, 3, 31, 12, 45));
             flightDAO.update(new Flight("Baku", "Istanbul", 32, 2020, 4, 13, 5, 35));
             flightDAO.update(new Flight("Baku", "Dubai", 17, 2020, 4, 18, 15, 0));
+            flightDAO.update(new Flight("Baku","New-York",14,2020,5,12,21,10));
+            flightDAO.update(new Flight("Baku","Berlin",18,2020,4,9,13,0));
+            flightDAO.update(new Flight("Baku","Rome",4,2020,3,28,0,5));
+            flightDAO.update(new Flight("Baku","Madrid",8,2020,4,2,9,40));
+            flightDAO.update(new Flight("Baku","Warsaw",25,2020,3,23,12,15));
+            flightDAO.update(new Flight("Baku","Wroclaw",15,2020,4,3,17,0));
         }
     }
 
-    public Optional<Flight> get(String flightID) throws IOException, ClassNotFoundException {
+    public Optional<Flight> get(String flightID) {
             return flightDAO.get(flightID);
     }
 
-    public boolean save(Flight flight) throws IOException, ClassNotFoundException {
-
+    public void save(Flight flight) {
             boolean flightExist = getAll().stream().anyMatch(f -> f.getFlightID().equals(flight.getFlightID()));
             if (!flightExist) {
-                return flightDAO.update(flight);
+                flightDAO.update(flight);
             }
-            return false;
-        }
+    }
 
-    public boolean delete(String id) throws IOException, ClassNotFoundException {
+    public boolean delete(String id) {
             boolean match = getAll().stream().anyMatch(flight ->
                     flight.getFlightID().equals(id));
             if (match) {
@@ -52,7 +52,7 @@ public class ServiceFlight {
         return false;
     }
 
-    public ArrayList<Flight> getAll() throws IOException, ClassNotFoundException {
+    public ArrayList<Flight> getAll() {
         return (ArrayList<Flight>) flightDAO.getAll();
     }
 }

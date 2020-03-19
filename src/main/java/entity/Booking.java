@@ -47,16 +47,8 @@ public class Booking implements Serializable {
         this.flight = flight;
     }
 
-    public String represent(){
-        return String.format("%s %s",passenger.represent(),flight.represent());
+    public String represent() {
+        return String.format("%s %s", passenger.represent(), flight.represent());
     }
-
-    @Override
-    public String toString() {
-        return "Booking{" +
-                "user=" + user +
-                ", passenger=" + passenger +
-                ", flight=" + flight +
-                '}';
-    }
+    
 }

@@ -29,6 +29,10 @@ public class Passenger implements Serializable {
         return id;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -37,8 +41,8 @@ public class Passenger implements Serializable {
         this.surname = surname;
     }
 
-    public String represent(){
-        return String.format("for %s %s",name,surname);
+    public String represent() {
+        return String.format("for %s %s", name, surname);
     }
 
     @Override
@@ -55,12 +59,4 @@ public class Passenger implements Serializable {
         return Objects.hash(name, surname);
     }
 
-    @Override
-    public String toString() {
-        return "Passenger{" +
-                "name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", id='" + id + '\'' +
-                '}';
-    }
 }

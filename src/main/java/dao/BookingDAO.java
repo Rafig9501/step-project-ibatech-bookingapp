@@ -1,15 +1,12 @@
 package dao;
 
 import entity.Booking;
-import entity.Flight;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class BookingDAO implements DAO<Booking> {
@@ -25,7 +22,7 @@ public class BookingDAO implements DAO<Booking> {
     }
 
     @Override
-    public Optional<Booking> get(String passengerID) throws IOException, ClassNotFoundException {
+    public Optional<Booking> get(String passengerID) {
         ArrayList<Booking> bookings = (ArrayList<Booking>) getAll();
         return bookings.stream().filter(booking
                 -> booking.getPassenger().getId().equals(passengerID)).findFirst();
@@ -33,13 +30,13 @@ public class BookingDAO implements DAO<Booking> {
 
     @Override
     public boolean create(Booking booking) {
-        FileOutputStream fos = null;
+        FileOutputStream fos;
         try {
             fos = new FileOutputStream(file);
         } catch (FileNotFoundException e) {
             return false;
         }
-        ObjectOutputStream oos = null;
+        ObjectOutputStream oos;
         try {
             oos = new ObjectOutputStream(fos);
         } catch (IOException e) {
@@ -59,21 +56,16 @@ public class BookingDAO implements DAO<Booking> {
 
     @Override
     public boolean delete(String passengerID) {
-        ArrayList<Booking> bookings = null;
-        try {
-            bookings = (ArrayList<Booking>) getAll();
-        } catch (IOException | ClassNotFoundException e) {
-            return false;
-        }
+        ArrayList<Booking> bookings = (ArrayList<Booking>) getAll();
         List<Booking> updatedBookings = bookings.stream().filter(booking ->
                 !booking.getPassenger().getId().equals(passengerID)).collect(Collectors.toList());
-        FileOutputStream fos = null;
+        FileOutputStream fos ;
         try {
             fos = new FileOutputStream(file);
         } catch (FileNotFoundException e) {
             return false;
         }
-        ObjectOutputStream oos = null;
+        ObjectOutputStream oos;
         try {
             oos = new ObjectOutputStream(fos);
         } catch (IOException e) {
@@ -91,19 +83,14 @@ public class BookingDAO implements DAO<Booking> {
 
     @Override
     public boolean update(Booking booking) {
-        ArrayList<Booking> bookings = null;
-        try {
-            bookings = (ArrayList<Booking>) getAll();
-        } catch (IOException | ClassNotFoundException e) {
-            return false;
-        }
-        FileOutputStream fos = null;
+        ArrayList<Booking> bookings = (ArrayList<Booking>) getAll();
+        FileOutputStream fos;
         try {
             fos = new FileOutputStream(file);
         } catch (FileNotFoundException e) {
             return false;
         }
-        ObjectOutputStream oos = null;
+        ObjectOutputStream oos;
         try {
             oos = new ObjectOutputStream(fos);
         } catch (IOException e) {
@@ -121,12 +108,27 @@ public class BookingDAO implements DAO<Booking> {
     }
 
     @Override
-    public Collection<Booking> getAll() throws IOException, ClassNotFoundException {
-        FileInputStream fis = new FileInputStream(file);
-        ObjectInputStream ois = new ObjectInputStream(fis);
-        Object readed = ois.readObject();
-        fis.close();
-        ois.close();
-        return (ArrayList<Booking>) readed;
+    public Collection<Booking> getAll() {
+        FileInputStream fis;
+        try {
+            fis = new FileInputStream(file);
+        } catch (FileNotFoundException e) {
+            return new ArrayList<>();
+        }
+        ObjectInputStream ois;
+        try {
+            ois = new ObjectInputStream(fis);
+        } catch (IOException e) {
+            return new ArrayList<>();
+        }
+        Object readed;
+        try {
+            readed = ois.readObject();
+            fis.close();
+            ois.close();
+            return (ArrayList<Booking>) readed;
+        } catch (IOException | ClassNotFoundException e) {
+            return new ArrayList<>();
+        }
     }
 }

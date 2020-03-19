@@ -7,11 +7,7 @@ import utilities.Credentials;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Optional;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class ServiceBooking {
@@ -19,17 +15,16 @@ public class ServiceBooking {
     BookingDAO bookingDAO;
     ServiceFlight serviceFlight;
 
-    public ServiceBooking() throws IOException, ClassNotFoundException {
+    public ServiceBooking() throws IOException {
         bookingDAO = new BookingDAO();
         serviceFlight = new ServiceFlight();
     }
 
-    public Optional<Booking> get(String passengerID) throws IOException, ClassNotFoundException {
+    public Optional<Booking> get(String passengerID) {
         return bookingDAO.get(passengerID);
     }
 
-    public boolean save(Booking booking) throws Exception {
-
+    public boolean save(Booking booking) {
         Flight flight = null;
         if (serviceFlight.getAll().stream().anyMatch(f ->
                 f.getFlightID().equals(booking.getFlightID()))) {
@@ -48,16 +43,16 @@ public class ServiceBooking {
         return false;
     }
 
-    public ArrayList<Booking> getAll() throws IOException, ClassNotFoundException {
-        if (bookingDAO.file.exists()){
-        return (ArrayList<Booking>) bookingDAO.getAll().stream().filter(booking ->
-                booking.getUser().getUserName().equals(Credentials.getUserName()))
-                .collect(Collectors.toList());
+    public ArrayList<Booking> getAll() {
+        if (bookingDAO.file.exists()) {
+            return (ArrayList<Booking>) bookingDAO.getAll().stream().filter(booking ->
+                    booking.getUser().getUserName().equals(Credentials.getUserName()))
+                    .collect(Collectors.toList());
         }
         return new ArrayList<>();
     }
 
-    public boolean delete(String passengerID) throws IOException, ClassNotFoundException {
+    public boolean delete(String passengerID) {
         if (bookingDAO.file.exists()) {
             return bookingDAO.delete(passengerID);
         }

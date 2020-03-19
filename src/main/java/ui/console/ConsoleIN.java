@@ -14,7 +14,7 @@ public class ConsoleIN {
 
     public static String menuLogIn() throws IOException {
 
-        switch (reader()){
+        switch (reader()) {
             case "1":
                 return "1";
             case "2":
@@ -31,7 +31,7 @@ public class ConsoleIN {
 
     public static String menuSignIn() throws IOException {
 
-        switch (reader()){
+        switch (reader()) {
             case "1":
                 return "1";
             case "2":

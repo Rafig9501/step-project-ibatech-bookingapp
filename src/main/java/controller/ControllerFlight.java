@@ -12,15 +12,15 @@ public class ControllerFlight {
 
     ServiceFlight service;
 
-    public ControllerFlight() throws IOException, ClassNotFoundException {
+    public ControllerFlight() {
         service = new ServiceFlight();
     }
 
-    public Optional<Flight> getFlight(String flightID) throws IOException, ClassNotFoundException {
+    public Optional<Flight> getFlight(String flightID){
         return service.get(flightID);
     }
 
-    public void getAllFlights() throws IOException, ClassNotFoundException {
+    public void getAllFlights() {
         ArrayList<Flight> flights = service.getAll();
         flights.forEach(flight -> ConsoleOUT.print(flight.represent()));
     }
