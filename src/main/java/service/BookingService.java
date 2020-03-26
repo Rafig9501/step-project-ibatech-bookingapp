@@ -10,32 +10,32 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class ServiceBooking {
+public class BookingService {
 
     BookingDAO bookingDAO;
-    ServiceFlight serviceFlight;
+    FlightService flightService;
 
-    public ServiceBooking() throws IOException {
+    public BookingService() throws IOException {
         bookingDAO = new BookingDAO();
-        serviceFlight = new ServiceFlight();
+        flightService = new FlightService();
     }
 
-    public Optional<Booking> get(String passengerID) {
-        return bookingDAO.get(passengerID);
+    public Optional<Booking> get(String bookingID) {
+        return bookingDAO.get(bookingID);
     }
 
     public boolean save(Booking booking) {
         Flight flight = null;
-        if (serviceFlight.getAll().stream().anyMatch(f ->
+        if (flightService.getAll().stream().anyMatch(f ->
                 f.getFlightID().equals(booking.getFlightID()))) {
-            flight = serviceFlight.getAll().stream().filter(f ->
+            flight = flightService.getAll().stream().filter(f ->
                     f.getFlightID().equals(booking.getFlightID())).findFirst().get();
         }
 
         if (flight != null && flight.getSeats() > 0) {
             flight.setSeats(flight.getSeats() - 1);
-            serviceFlight.delete(flight.getFlightID());
-            serviceFlight.save(flight);
+            flightService.delete(flight.getFlightID());
+            flightService.save(flight);
             delete(booking.getPassenger().getId());
             booking.setFlight(flight);
             return bookingDAO.update(booking);
@@ -52,9 +52,9 @@ public class ServiceBooking {
         return new ArrayList<>();
     }
 
-    public boolean delete(String passengerID) {
+    public boolean delete(String bookingID) {
         if (bookingDAO.file.exists()) {
-            return bookingDAO.delete(passengerID);
+            return bookingDAO.delete(bookingID);
         }
         return false;
     }

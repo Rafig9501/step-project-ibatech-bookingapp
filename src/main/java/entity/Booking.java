@@ -1,6 +1,10 @@
 package entity;
 
+import utilities.RandomGen;
+
 import java.io.Serializable;
+
+import static utilities.RandomGen.*;
 
 public class Booking implements Serializable {
 
@@ -8,15 +12,21 @@ public class Booking implements Serializable {
     Passenger passenger;
     String flightID;
     Flight flight;
+    String bookingID;
 
     public Booking(User user, Passenger passenger, String flightID) {
         this.user = user;
         this.passenger = passenger;
         this.flightID = flightID;
+        this.bookingID = genBookingID();
     }
 
     public User getUser() {
         return user;
+    }
+
+    public String getBookingID() {
+        return bookingID;
     }
 
     public Passenger getPassenger() {
@@ -48,7 +58,7 @@ public class Booking implements Serializable {
     }
 
     public String represent() {
-        return String.format("%s %s", passenger.represent(), flight.represent());
+        return String.format("%s %s %s", passenger.represent(), flight.represent()," booking ID is " + bookingID);
     }
     
 }

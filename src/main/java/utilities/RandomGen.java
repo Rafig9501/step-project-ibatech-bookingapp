@@ -9,6 +9,7 @@ public class RandomGen {
 
     static List<String> flightID = new ArrayList<>();
     static List<String> passengerID = new ArrayList<>();
+    static List<String> bookingID = new ArrayList<>();
 
     public static String genFlightID() {
 
@@ -25,6 +26,14 @@ public class RandomGen {
         String numeric = RandomStringUtils.randomNumeric(2);
         if (!(passengerID.contains(numeric))) {
             passengerID.add(numeric);
+            return numeric;
+        } else return genPassengerID();
+    }
+
+    public static String genBookingID(){
+        String numeric = RandomStringUtils.randomNumeric(3);
+        if (!(bookingID.contains(numeric))) {
+            bookingID.add(numeric);
             return numeric;
         } else return genPassengerID();
     }

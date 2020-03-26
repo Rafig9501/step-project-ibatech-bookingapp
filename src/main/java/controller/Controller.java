@@ -1,23 +1,25 @@
 package controller;
 
+import entity.Flight;
 import ui.console.ConsoleIN;
 import ui.console.ConsoleOUT;
 import utilities.Credentials;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import static utilities.Constants_.*;
 
 public class Controller {
 
-    ControllerUser controllerUser;
-    ControllerBooking controllerBooking;
-    ControllerFlight controllerFlight;
+    UserController userController;
+    BookingController bookingController;
+    FlightController flightController;
 
     public Controller() throws IOException {
-        controllerUser = new ControllerUser();
-        controllerFlight = new ControllerFlight();
-        controllerBooking = new ControllerBooking();
+        userController = new UserController();
+        flightController = new FlightController();
+        bookingController = new BookingController();
     }
 
     public void mainMenu() throws Exception {
@@ -36,7 +38,7 @@ public class Controller {
             case DELETE_USER:
                 deleteUser();
                 break;
-            case EXIT:
+            case EXIT_IN_LOG_IN:
                 break;
         }
     }
@@ -46,7 +48,7 @@ public class Controller {
         String username = ConsoleIN.reader();
         ConsoleOUT.password();
         String password = ConsoleIN.reader();
-        boolean saveUser = controllerUser.saveUser(username, password);
+        boolean saveUser = userController.saveUser(username, password);
         if (saveUser) {
             ConsoleOUT.registered();
             Credentials.addingUser(username, password);
@@ -58,20 +60,32 @@ public class Controller {
     }
 
     void logIn(String username, String password) throws Exception {
-        if (controllerUser.service.getAll().stream().anyMatch(user -> user.getUserName().equals(username)
+        if (userController.service.getAll().stream().anyMatch(user -> user.getUserName().equals(username)
                 && user.getPassword().equals(password))) {
             Credentials.addingUser(username, password);
             ConsoleOUT.printingMenuSignedIn();
             switch (ConsoleIN.menuSignIn()) {
-                case SHOW_FLIGHTS:
-                    controllerFlight.getAllFlights();
+                case SHOW_FLIGHTS_ALL_FLIGHTS:
+                    flightController.getAllFlights();
+                    logIn(username, password);
+                    break;
+                case SHOW_FLIGHTS_WITHIN_24_HOURS:
+                    flightController.getAllFlightsWithin24hours();
+                    logIn(username, password);
+                    break;
+                case SHOW_INFORMATION_ABOUT_FLIGHT_BY_ID:
+                    ConsoleOUT.flightId();
+                    String flightID = ConsoleIN.reader();
+                    Optional<Flight> flight = flightController.getFlight(flightID);
+                    if (flight.isPresent()) flight.ifPresent((f -> ConsoleOUT.print(f.represent())));
+                    else ConsoleOUT.wrongFlightID();
                     logIn(username, password);
                     break;
                 case MAKE_BOOKING:
                     makeBooking(username, password);
                     break;
                 case SHOW_MY_BOOKINGS:
-                    if (controllerBooking.getAllBookings()) {
+                    if (bookingController.getAllBookings()) {
                         logIn(username, password);
                         break;
                     } else {
@@ -86,6 +100,8 @@ public class Controller {
                     Credentials.deletingUser(username, password);
                     mainMenu();
                     break;
+                case EXIT_IN_SIGNED_IN:
+                    break;
             }
         } else {
             ConsoleOUT.failed();
@@ -94,20 +110,46 @@ public class Controller {
     }
 
     void makeBooking(String username, String password) throws Exception {
-        ConsoleOUT.passengerName();
-        String name = ConsoleIN.reader();
-        ConsoleOUT.passengeSurname();
-        String surname = ConsoleIN.reader();
-        ConsoleOUT.flightId();
-        String flightID = ConsoleIN.reader();
-        boolean savedBooking = controllerBooking.saveBooking(name, surname, flightID);
-        if (savedBooking) {
-            ConsoleOUT.bookingMade();
+        ConsoleOUT.destination();
+        String destination = ConsoleIN.reader();
+        ConsoleOUT.month();
+        String month = ConsoleIN.reader();
+        ConsoleOUT.day();
+        String day = ConsoleIN.reader();
+        boolean exist = bookingController.flghtsInThisDirection(destination, month, day);
+        int passengerAmount;
+        if (!exist) {
+            ConsoleOUT.wrongBookingDetails();
             logIn(username, password);
         } else {
-            ConsoleOUT.bookingDidntMade();
-            logIn(username, password);
+            ConsoleOUT.passengerAmount();
+            try {
+                passengerAmount = Integer.parseInt(ConsoleIN.reader());
+                makingBookingWithAmount(passengerAmount, username, password);
+            } catch (Exception e) {
+                ConsoleOUT.wrongAmount();
+                logIn(username, password);
+            }
         }
+    }
+
+    private void makingBookingWithAmount(int amount, String username, String password) throws Exception {
+        for (int i = 0; i < amount; i++) {
+            ConsoleOUT.passengerName();
+            String name = ConsoleIN.reader();
+            ConsoleOUT.passengeSurname();
+            String surname = ConsoleIN.reader();
+            ConsoleOUT.flightId();
+            String flightID = ConsoleIN.reader();
+            boolean savedBooking = bookingController.saveBooking(name, surname, flightID);
+            if (savedBooking) {
+                ConsoleOUT.bookingMade();
+            } else {
+                ConsoleOUT.bookingDidntMade();
+                logIn(username, password);
+            }
+        }
+        logIn(username, password);
     }
 
     void deleteUser() throws Exception {
@@ -115,7 +157,7 @@ public class Controller {
         String username = ConsoleIN.reader();
         ConsoleOUT.password();
         String password = ConsoleIN.reader();
-        if (controllerUser.deleteUser(username, password)) {
+        if (userController.deleteUser(username, password)) {
             deleteSuccess(username, password);
         } else {
             deleteFailed();
@@ -134,15 +176,11 @@ public class Controller {
     }
 
     void cancelBooking(String username, String password) throws Exception {
-        ConsoleOUT.passengerName();
-        String passengerName = ConsoleIN.reader();
-        ConsoleOUT.passengeSurname();
-        String passengerSurname = ConsoleIN.reader();
-        ConsoleOUT.flightId();
-        String flightID = ConsoleIN.reader();
-        boolean deleted = controllerBooking.deleteBooking(passengerName, passengerSurname, flightID);
+        ConsoleOUT.bookingID();
+        String bookingID = ConsoleIN.reader();
+        boolean deleted = bookingController.deleteBooking(bookingID);
         if (!deleted) {
-            ConsoleOUT.notSuccesful();
+            ConsoleOUT.wrongBookingID();
             logIn(username, password);
         } else {
             ConsoleOUT.bookingDeleted();

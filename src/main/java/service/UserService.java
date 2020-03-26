@@ -7,11 +7,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
 
-public class ServiceUser {
+public class UserService {
 
     UserDAO userDAO;
 
-    public ServiceUser() throws IOException {
+    public UserService() throws IOException {
         userDAO = new UserDAO();
     }
 

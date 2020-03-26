@@ -1,18 +1,18 @@
 package controller;
 
 import entity.User;
-import service.ServiceUser;
+import service.UserService;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
 
-public class ControllerUser {
+public class UserController {
 
-    ServiceUser service;
+    UserService service;
 
-    public ControllerUser() throws IOException {
-        service = new ServiceUser();
+    public UserController() throws IOException {
+        service = new UserService();
     }
 
     public Optional<User> getUser(String userName) {

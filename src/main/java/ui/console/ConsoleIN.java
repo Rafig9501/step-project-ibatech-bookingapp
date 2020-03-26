@@ -44,6 +44,10 @@ public class ConsoleIN {
                 return "5";
             case "6":
                 return "6";
+            case "7":
+                return "7";
+            case "8":
+                return "8";
             default:
                 ConsoleOUT.print("Please enter right command");
                 return menuSignIn();

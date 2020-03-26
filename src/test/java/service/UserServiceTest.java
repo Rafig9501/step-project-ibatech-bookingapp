@@ -1,45 +1,49 @@
 package service;
 
+import dao.UserDAO;
 import entity.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ServiceUserTest {
+class UserServiceTest {
 
-    ServiceUser serviceUser;
+    UserService userService;
     User user;
+    UserDAO userDAO;
 
     @BeforeEach
     void testInstances() throws IOException {
-        serviceUser = new ServiceUser();
+        userService = new UserService();
+        userDAO = new UserDAO();
         user = new User("rafi", "rafa");
     }
 
     @Test
     void get() {
-        assertTrue(serviceUser.get("rafi").isPresent());
+        userDAO.create(user);
+        assertTrue(userService.get("rafi").isPresent());
     }
 
     // this method works only once for one user. it doesn't create same user more than once
     @Test
     void save() {
-        assertTrue(serviceUser.save(user));
+        User user = new User("rafa","rafa");
+        assertTrue(userService.save(user));
     }
 
     @Test
     void getAll(){
-        save();
-        assertFalse(serviceUser.getAll().isEmpty());
+        userDAO.create(user);
+        assertFalse(userService.getAll().isEmpty());
     }
 
     @Test
     void delete(){
-        assertTrue(serviceUser.delete("rafig","rafa"));
+        userDAO.create(user);
+        assertTrue(userService.delete("rafi","rafa"));
     }
 }
