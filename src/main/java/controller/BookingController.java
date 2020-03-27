@@ -30,6 +30,7 @@ public class BookingController {
         if (userService.get(Credentials.getUserName()).isPresent()) {
             Booking booking = new Booking(userService.get(Credentials.getUserName()).get(),
                     new Passenger(name, surname), flightID);
+            booking.setFlight(flightService.get(flightID).get());
             Credentials.setBookingID(booking.getBookingID());
             saved = bookingService.save(booking);
         }

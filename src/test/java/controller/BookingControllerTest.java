@@ -7,8 +7,10 @@ import entity.Booking;
 import entity.Flight;
 import entity.Passenger;
 import entity.User;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import service.BookingService;
 import utilities.Credentials;
 
 import java.io.IOException;
@@ -24,6 +26,21 @@ class BookingControllerTest {
     User user;
     UserDAO userDAO;
     FlightDAO flightDAO;
+    BookingService bookingService;
+    BookingDAO bookingDAO;
+
+    @AfterEach
+    void deletingEverything(){
+        if (flightDAO.file.exists()){
+            flightDAO.file.delete();
+        }
+        if (userDAO.file.exists()){
+            userDAO.file.delete();
+        }
+        if (bookingDAO.file.exists()){
+            bookingDAO.file.delete();
+        }
+    }
 
     @BeforeEach
     void creatingInstances() throws IOException {
@@ -31,29 +48,34 @@ class BookingControllerTest {
         user = new User("rafi","rafi");
         passenger = new Passenger("Rafi","Rafi");
         flight = new Flight("Istanbul","Dubai",12,2020,12,2,14,20);
-        flight.setFlightID("32 FDS");
+        flight.setFlightID("45 FDS");
         userDAO = new UserDAO();
         userDAO.create(user);
         flightDAO = new FlightDAO();
+        bookingDAO = new BookingDAO();
         flightDAO.update(flight);
         booking = new Booking(user,passenger,flight.getFlightID());
+        bookingService = new BookingService();
     }
 
     @Test
     void saveBooking() {
+        Credentials.loggedIn.clear();
         Credentials.addingUser(user.getUserName(),user.getPassword());
         assertTrue(controller.saveBooking(passenger.getName(),passenger.getSurname(),flight.getFlightID()));
     }
 
     @Test
     void getAllBookings() {
+        Credentials.loggedIn.clear();
         Credentials.addingUser(user.getUserName(),user.getPassword());
         assertTrue(controller.saveBooking(passenger.getName(),passenger.getSurname(),flight.getFlightID()));
         assertTrue(controller.getAllBookings());
     }
 
     @Test
-    void deleteBooking() throws IOException {
+    void deleteBooking() {
+        Credentials.loggedIn.clear();
         Credentials.addingUser(user.getUserName(),user.getPassword());
         assertTrue(controller.saveBooking(passenger.getName(),passenger.getSurname(),flight.getFlightID()));
         assertTrue(controller.deleteBooking(Credentials.bookingID));

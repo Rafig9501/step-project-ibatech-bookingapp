@@ -4,6 +4,7 @@ import entity.Booking;
 import entity.Flight;
 import entity.Passenger;
 import entity.User;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,12 +14,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BookingDAOTest {
 
-    BookingDAO dao;
+    BookingDAO bookingDAO;
     Booking booking;
+    UserDAO userDAO;
+    FlightDAO flightDAO;
 
     @BeforeEach
     void creatingInstances() throws IOException {
-        dao = new BookingDAO();
+        bookingDAO = new BookingDAO();
+        userDAO = new UserDAO();
+        flightDAO = new FlightDAO();
         User user = new User("rafi","rafi");
         Passenger passenger = new Passenger("Rafi","Rafi");
         Flight flight = new Flight("Istanbul","Dubai",12,2020,12,2,14,20);
@@ -26,31 +31,44 @@ class BookingDAOTest {
         booking = new Booking(user,passenger,flight.getFlightID());
     }
 
+    @AfterEach
+    void deletingEverything(){
+        if (flightDAO.file.exists()){
+            flightDAO.file.delete();
+        }
+        if (userDAO.file.exists()){
+            userDAO.file.delete();
+        }
+        if (bookingDAO.file.exists()){
+            bookingDAO.file.delete();
+        }
+    }
+
     @Test
     void get() {
-        dao.create(booking);
-        assertTrue(dao.get(booking.getBookingID()).isPresent());
+        bookingDAO.create(booking);
+        assertTrue(bookingDAO.get(booking.getBookingID()).isPresent());
     }
 
     @Test
     void create() {
-        assertTrue(dao.create(booking));
+        assertTrue(bookingDAO.create(booking));
     }
 
     @Test
     void delete() {
-        dao.create(booking);
-        assertTrue(dao.delete(booking.getBookingID()));
+        bookingDAO.create(booking);
+        assertTrue(bookingDAO.delete(booking.getBookingID()));
     }
 
     @Test
     void update() {
-        assertTrue(dao.update(booking));
+        assertTrue(bookingDAO.update(booking));
     }
 
     @Test
     void getAll() {
-        dao.create(booking);
-        assertFalse(dao.getAll().isEmpty());
+        bookingDAO.create(booking);
+        assertFalse(bookingDAO.getAll().isEmpty());
     }
 }

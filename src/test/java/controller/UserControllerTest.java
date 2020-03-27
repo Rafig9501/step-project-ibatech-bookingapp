@@ -1,7 +1,10 @@
 package controller;
 
+import dao.BookingDAO;
+import dao.FlightDAO;
 import dao.UserDAO;
 import entity.User;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,11 +16,28 @@ class UserControllerTest {
 
     UserController controller;
     UserDAO userDAO;
+    FlightDAO flightDAO;
+    BookingDAO bookingDAO;
 
     @BeforeEach
     void creatingInstances() throws IOException {
         controller = new UserController();
         userDAO = new UserDAO();
+        flightDAO = new FlightDAO();
+        bookingDAO = new BookingDAO();
+    }
+
+    @AfterEach
+    void deletingEverything(){
+        if (flightDAO.file.exists()){
+            flightDAO.file.delete();
+        }
+        if (userDAO.file.exists()){
+            userDAO.file.delete();
+        }
+        if (bookingDAO.file.exists()){
+            bookingDAO.file.delete();
+        }
     }
 
     @Test
