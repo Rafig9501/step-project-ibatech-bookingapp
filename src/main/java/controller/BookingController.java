@@ -50,7 +50,7 @@ public class BookingController {
         if (getBooking(bookingID).isPresent()) {
             int seats = getBooking(bookingID).get().getFlight().getSeats();
             Flight flight = getBooking(bookingID).get().getFlight();
-            flight.setSeats(seats+1);
+            flight.setSeats(++seats);
             flightService.save(flight);
             return bookingService.delete(getBooking(bookingID).get().getBookingID());
         } else return false;
