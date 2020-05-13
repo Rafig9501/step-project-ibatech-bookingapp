@@ -7,9 +7,9 @@ import static utilities.RandomGen.genPassengerID;
 
 public class Passenger implements Serializable {
 
-    String name;
-    String surname;
-    String id;
+    String name;//zayka
+    String surname;//zaykayevic
+    String id;//pis-pis
 
     public Passenger(String name, String surname) {
         this.name = name;
